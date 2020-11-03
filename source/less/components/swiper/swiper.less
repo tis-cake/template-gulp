@@ -1,0 +1,286 @@
+// контейнер 2 слайдеров - с прогресс-баром и пагинацией
+.two-pagination-swipers-wrap {
+  position: relative;
+}
+
+// контейнер 2 слайдеров - пагинация-thummbs и основной
+.two-swipers-wrap {}
+
+.swiper-container {
+  &-progressbar {
+    padding-bottom: 9.6rem;
+  }
+
+  &-pagination {
+    position: absolute;
+    z-index: 0;
+    bottom: 2rem;
+    width: 100%;
+    height: 2rem;
+    .swiper-wrapper {
+      display: none;
+    }
+  }
+
+  &-thumbs {}
+
+  &-content {}
+}
+
+.swiper-wrapper {}
+
+.swiper-buttons-wrap {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(38.8rem);
+  bottom: 0.8rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 7rem;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  position: relative;
+  top: 0;
+  left: auto;
+  right: auto;
+  width: 0.8rem;
+  height: 1.4rem;
+  margin: 0;
+  padding: 1rem;
+  color: @black;
+  &::after {
+    width: 0.8rem;
+    height: 1.4rem;
+    font-size: 0;
+
+    background-image: url('../img/icons/icon-arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+  }
+}
+
+.swiper-button-prev {
+  &::after {
+    transform: rotate(180deg);
+  }
+}
+
+.swiper-progressbar {
+  overflow: hidden;
+  background-color: #DDE6FF;
+  border-radius: 2.8rem;
+  .swiper-pagination-progressbar-fill {
+    background-color: @blue;
+  }
+}
+
+.swiper-container-horizontal > .swiper-progressbar {
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0.2rem;
+  width: 93.4rem;
+}
+
+.swiper-pagination {
+  box-sizing: border-box;
+  position: relative;
+  top: 0;
+  left: 50%;
+  transform: translateX(-44.8rem);
+  bottom: auto;
+
+  width: 8rem;
+  // padding-left: 27.2rem;
+
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: @gray;
+  &-current,
+  &-current-zero {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: @black;
+  }
+  &-current-zero.hidden {
+    display: none;
+  }
+}
+
+.swiper-scrollbar {
+  box-sizing: border-box;
+
+  background-color: #DDE6FF;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.swiper-container-vertical > .swiper-scrollbar {
+  left: 0;
+  right: auto;
+  width: 0.5rem;
+}
+
+.swiper-container-horizontal > .swiper-scrollbar {
+  height: 0.4rem;
+}
+
+.swiper-scrollbar-drag {
+  background-color: @blue;
+}
+
+.swiper-pagination-bullet {
+  position: relative;
+  width: auto;
+  height: auto;
+  padding: 0.2rem 1rem;
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+
+  color: #9FAAB9;
+  background-color: transparent;
+
+  opacity: 1;
+
+  &::before {
+    position: absolute;
+    content: none;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -10.4rem;
+
+    width: 9rem;
+    height: 0.1rem;
+
+    background-color: #9FAAB9;
+
+    // transition-property: width;
+    // transition-duration: @s;
+  }
+
+  &-active {
+    font-weight: 700;
+    color: @black;
+
+    margin-right: 12rem;
+    &::before {
+      content: '';
+    }
+  }
+
+  &-active:last-child {
+    margin-right: 0;
+    &::before {
+      content: none;
+    }
+  }
+
+  // &.active-decor {
+    // margin-right: 14rem;
+    // &::before {
+    //   content: '';
+    // }
+  // }
+}
+
+.swiper-pagination-wrap {
+  transform: translateX(-50%);
+  width: auto;
+
+  .swiper-pagination {
+    left: auto;
+    transform: none;
+    width: auto;
+  }
+  .swiper-button-prev {
+    margin-right: 2.5rem;
+  }
+  .swiper-button-next {
+    margin-left: 2.5rem;
+  }
+}
+
+.swiper-container-two-rows {
+  padding-bottom: 8rem;
+  .swiper-slide {
+    margin-bottom: 4.5rem;
+  }
+}
+
+@media only screen and (max-width: @tablet-width) {
+  // контейнер 2 слайдеров - с прогресс-баром и пагинацией
+  .two-pagination-swipers-wrap {}
+
+  // контейнер 2 слайдеров - пагинация-thummbs и основной
+  .two-swipers-wrap {}
+
+  .swiper-container {
+    &-progressbar {
+      padding-bottom: 9.3rem;
+    }
+
+    &-pagination {
+      bottom: 4rem;
+
+      /**/
+      box-sizing: border-box;
+    }
+
+    &-thumbs {}
+
+    &-content {}
+  }
+
+  .swiper-wrapper {}
+
+  .swiper-buttons-wrap {
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 100%;
+  }
+
+  .swiper-button-next {
+    // right: -0.5rem;
+    right: 1rem;
+  }
+
+  .swiper-button-prev {
+    // left: -0.5rem;
+    left: 1rem;
+  }
+
+  .swiper-container-horizontal > .swiper-progressbar {
+    width: 69%;
+    bottom: 1.4rem;
+  }
+
+  .swiper-pagination {
+    transform: translateX(-50%);
+    width: 8rem;
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .swiper-container-vertical > .swiper-scrollbar {
+    // left: 0;
+    // right: auto;
+  }
+
+  .swiper-container-horizontal > .swiper-scrollbar {
+    // height: 0.4rem;
+  }
+
+  .swiper-scrollbar-drag {
+    // background-color: @blue;
+  }
+}

@@ -1,0 +1,133 @@
+@circe: 'Circe', 'Arial', sans-serif;
+@gilroy: 'Gilroy', 'Arial', sans-serif;
+
+@black: #2B3042;
+@blue: #3468EC;
+@gray: #9FAAB9;
+
+// 390px
+@iphone-small: 24.4em;
+@mobile-width: 420px;
+// 755px;
+@tablet-width: 48em;
+@desktop-width: 1690px;
+@max-desktop-width: 1921px;
+
+@retina-dpi: 144dpi;
+@retina-dppx: 1.5dppx;
+
+@s: 0.5s;
+@a: auto;
+
+@solid: 1px solid red;
+
+.o {
+  outline: 1px solid red;
+}
+
+.o(@color) {
+  outline: 1px solid @color;
+}
+
+.r {
+  border: 1px solid red;
+}
+
+.b(@color) {
+  border: 1px solid @color;
+}
+
+.text-stroke {
+  text-shadow: #000 1px 1px 0,
+               #000 -1px -1px 0,
+               #000 -1px 1px 0,
+               #000 1px -1px 0;
+}
+
+.text-stroke(@color, @offset) {
+  text-shadow: @color @offset @offset 0,
+               @color -@offset -@offset 0,
+               @color -@offset @offset 0,
+               @color @offset -@offset 0;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;
+}
+
+.reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mp-reset(@margin; @padding) {
+  margin: @margin;
+  padding: @padding;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.margin-block(@value) {
+  margin-top: @value;
+  margin-bottom: @value;
+}
+
+.margin-block(@value1, @value2) {
+  margin-top: @value1;
+  margin-bottom: @value2;
+}
+
+.margin-inline(@value) {
+  margin-left: @value;
+  margin-right: @value;
+}
+
+.margin-inline(@value1, @value2) {
+  margin-left: @value1;
+  margin-right: @value2;
+}
+
+.padding-block(@value) {
+  padding-top: @value;
+  padding-bottom: @value;
+}
+
+.padding-block(@value1, @value2) {
+  padding-top: @value1;
+  padding-bottom: @value2;
+}
+
+.padding-inline(@value) {
+  padding-left: @value;
+  padding-right: @value;
+}
+
+.padding-inline(@value1, @value2) {
+  padding-left: @value1;
+  padding-right: @value2;
+}
+
+// для ретины
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5),
+only screen and (min-resolution: 1.5dppx),
+only screen and (min-resolution: 144dpi) {
+}

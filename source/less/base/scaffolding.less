@@ -1,0 +1,176 @@
+html {
+  // font-size: 62.5%;
+  // 1 rem = 16px * 62.5% / 100 = 10px
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  // font-family: @font-main;
+  font-weight: 400;
+  font-size: 18px;
+
+  // color: @color-main;
+  background-image: linear-gradient(180deg, #F7FBFF -4.45%, #EFF5FD 16.62%, #F6FAFE 38.94%, #F6FAFF 82.29%);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  .no-select;
+}
+
+a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  .reset-list();
+}
+
+time {
+  display: inline-block;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  .mp-reset(0,0);
+}
+
+label,
+input,
+button,
+textarea {
+  box-sizing: border-box;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  // font-family: @font-main;
+  font-size: inherit;
+  // color: @color-main;
+}
+
+textarea {
+  resize: none;
+}
+
+fieldset {
+  padding: 0;
+  border: 0;
+}
+
+blockquote,
+figure,
+fieldset,
+dl,
+dd {
+  margin: 0;
+}
+
+.noscroll {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+.overlay {
+  display: none;
+
+  z-index: 99;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(246,249,255,0.7);
+
+  &.active {
+    display: block;
+  }
+}
+
+.visually-hidden:not(:focus):not(:active),
+input[type="checkbox"].visually-hidden,
+input[type="radio"].visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+
+  white-space: nowrap;
+
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  .margin-inline(@a);
+  .padding-inline(20px);
+}
+
+.container {
+  // width: 1440px;
+}
+
+html .mobile-flex,
+html .mobile-block {
+  display: none;
+}
+
+html .desktop-block {
+  display: block;
+}
+
+html .desktop-flex {
+  display: flex;
+}
+
+.js-phone-mask:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+@media only screen and (max-width: @tablet-width) {
+
+  html {
+    --padding-inline: 20px;
+  }
+
+  .container{
+    width: @a;
+    .padding-inline(var(--padding-inline));
+  }
+
+  html .desktop-flex,
+  html .desktop-block {
+    display: none;
+  }
+
+  html .mobile-block {
+    display: block;
+  }
+
+  html .mobile-flex {
+    display: flex;
+  }
+}
