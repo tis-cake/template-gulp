@@ -9,6 +9,10 @@
     "autoprefixer": "^9.7.3",
     "browser-sync": "^2.26.10",
     "del": "^6.0.0",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-html": "^6.1.1",
+    "eslint-plugin-import": "^2.22.1",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
@@ -31,7 +35,8 @@
     "gulp-webp": "^4.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint source/js/",
+    "lint fix": "eslint source/js/ --fix"
   },
   "repository": {
     "type": "git",

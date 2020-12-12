@@ -1,0 +1,4 @@
+node_modules
+other
+/.git
+/gulpfile.js

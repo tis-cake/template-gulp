@@ -1,0 +1,27 @@
+{
+  'env': {
+    'browser': true,
+    'es6': true,
+    'node': true,
+  },
+  'plugins': ['html'],
+  'extends': ['airbnb-base'],
+  'rules': {
+    'strict': ['error', 'global'],
+    'no-use-before-define': ['error', { 'functions': false, 'classes': true }],
+    'max-len': ['error', 160],
+    'no-plusplus': 'off',
+    'no-multi-spaces': 'off',
+    'space-before-function-paren': 'off',
+    'prefer-const': 'off',
+    // опционально
+    'prefer-destructuring': 'off',
+    'prefer-arrow-callback': 'off',
+    'no-restricted-syntax': ['off', 'BinaryExpression[operator="in"]'],
+    // 'no-param-reassign': ['error', { 'props': false }],
+    'no-param-reassign': 'warn',
+  },
+  'parserOptions': {
+    'sourceType': 'script',
+  },
+}
