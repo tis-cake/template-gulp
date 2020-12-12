@@ -1,4 +1,5 @@
 node_modules
-other
 /.git
+/source/js/libs
 /gulpfile.js
+
