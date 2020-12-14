@@ -1,1 +1,1 @@
-var swiper = new Swiper('#swiper', {});
+// var swiper = new Swiper('#swiper', {});

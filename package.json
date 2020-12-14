@@ -38,17 +38,18 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm lint",
+      "pre-commit": "npm run lint"
     }
   },
-  // "lint-staged": {
-  //   "*.js": [
-  //     "npm run lint",
-  //   ]
-  // },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint",
+      "git add"
+    ]
+  },
   "scripts": {
-    "lint": "eslint source/js/",
-    "lint fix": "eslint source/js/ --fix"
+    "lint": "eslint source/js/ --color",
+    "lint fix": "eslint source/js/ --fix --color"
   },
   "repository": {
     "type": "git",
