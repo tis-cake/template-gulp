@@ -49,7 +49,7 @@
   },
   "scripts": {
     "lint": "eslint source/js/ --color",
-    "lint fix": "eslint source/js/ --fix --color"
+    "lint:fix": "eslint source/js/ --fix --color"
   },
   "repository": {
     "type": "git",
