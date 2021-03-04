@@ -1,5 +1,12 @@
 node_modules
 /.git
-/source/js/libs
+
 /gulpfile.js
 
+/source/js/libs
+/source/js/build.js
+/source/js/build.min.js
+
+/build/js/libs
+/build/js/build.js
+/build/js/build.min.js
