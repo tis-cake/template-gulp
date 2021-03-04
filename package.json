@@ -58,12 +58,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tis-cake/template.git"
+    "url": "git+https://github.com/tis-cake/template-gulp.git"
   },
   "author": "tis <tisbootis@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tis-cake/template/issues"
+    "url": "https://github.com/tis-cake/template-gulp/issues"
   },
-  "homepage": "https://github.com/tis-cake/template#readme"
+  "homepage": "https://github.com/tis-cake/template-gulp#readme"
 }
