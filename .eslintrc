@@ -9,19 +9,29 @@
   'rules': {
     'strict': ['error', 'global'],
     'no-use-before-define': ['error', { 'functions': false, 'classes': true }],
-    'max-len': ['error', 160],
+    'max-len': ['warn', 160],
     'no-plusplus': 'off',
     'no-multi-spaces': 'off',
     'space-before-function-paren': 'off',
-    'prefer-const': 'off',
-    // опционально
-    'prefer-destructuring': 'off',
-    'prefer-arrow-callback': 'off',
-    'no-restricted-syntax': ['off', 'BinaryExpression[operator="in"]'],
+    // 'prefer-const': 'off',
+    // 'prefer-destructuring': 'off',
     // 'no-param-reassign': ['error', { 'props': false }],
+    // 'no-restricted-syntax': ['off', 'BinaryExpression[operator='in']'],
+    // 'arrow-body-style': ['error', 'always'],
+    // 'prefer-arrow-callback': 'warn',
+    'arrow-body-style': 'off',
+    'class-methods-use-this': 'warn',
+    'no-underscore-dangle': ['error', { 'allowAfterThis': true }],
+    'no-restricted-syntax': ['off', 'ForOfStatement'],
     'no-param-reassign': 'warn',
+    'prefer-object-spread': ['warn'],
+    'import/prefer-default-export': 'off',
+    'object-curly-newline': ['error', {
+      'multiline': true,
+    }]
   },
   'parserOptions': {
-    'sourceType': 'script',
+    // sourceType: 'module',
+    ecmaVersion: 2015
   },
 }

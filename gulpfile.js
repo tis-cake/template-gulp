@@ -1,40 +1,131 @@
-'use strict';
+import gulp from 'gulp';
+import del from 'del';
+import fs from 'fs';
 
-const gulp = require('gulp');
-const del = require('del');
-const fs = require('fs');
+import notify from 'gulp-notify';
+import rename from 'gulp-rename';
+import replace from 'gulp-replace';
+import plumber from 'gulp-plumber';
+import sourcemaps from 'gulp-sourcemaps';
+import browserSync from 'browser-sync';
 
-const concat = require('gulp-concat');
-const notify = require('gulp-notify');
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const plumber = require('gulp-plumber');
-const sourcemap = require('gulp-sourcemaps');
-const server = require('browser-sync').create();
+import less from 'gulp-less';
+import postcss from 'gulp-postcss';
+import autoprefixer from 'autoprefixer';
+import minCSS from 'gulp-clean-css';
 
-// const sass = require('gulp-sass');
-const less = require('gulp-less');
-const postcss = require('gulp-postcss');
-const autoprefixer = require('autoprefixer');
-const cleanCSS = require('gulp-clean-css');
+import babel from 'gulp-babel';
+import minJS from 'gulp-terser';
 
-const babel = require('gulp-babel');
-const uglify = require('gulp-uglify-es').default;
+import webpack from 'webpack';
+import webpackStream from 'webpack-stream';
 
-const webp = require('gulp-webp');
-const imagemin = require('gulp-imagemin');
-const svgstore = require('gulp-svgstore');
+import webp from 'gulp-webp';
+import imagemin from 'gulp-imagemin';
+import imageminJpegtran from 'imagemin-jpegtran';
+import svgstore from 'gulp-svgstore';
 
-const pug = require('gulp-pug');
-const formatHTML = require('gulp-format-html');
-const fileinclude = require('gulp-file-include');
+import minHTML from 'gulp-htmlmin';
+import formatHTML from 'gulp-format-html';
+import fileinclude from 'gulp-file-include';
 
-const ttf2woff = require('gulp-ttf2woff');
-const ttf2woff2 = require('gulp-ttf2woff2');
+import ttf2woff from 'gulp-ttf2woff';
+import ttf2woff2 from 'gulp-ttf2woff2';
 
 // DEV
 
-// gulp.task('pug', function() {
+export const htmlInclude = () => {
+  return gulp.src('source/html/pages/**/*.html')
+    .pipe(fileinclude({
+      prefix: '@',
+      basepath: '@file',
+    }))
+    .pipe(gulp.dest('source/'))
+    .pipe(server.stream());
+};
+
+export const css = () => {
+  return gulp.src('source/less/style.less')
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(less().on('error', notify.onError()))
+    // .pipe(sass({outputStyle: 'expanded'}).on('error', notify.onError()))
+    .pipe(postcss([autoprefixer()]))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('source/css'))
+    .pipe(browserSync.stream());
+};
+
+export const js = () => {
+  return gulp.src('source/js/main.js')
+    .pipe(webpackStream(
+      {
+        mode: 'development',
+        output: {
+          filename: 'build.js',
+        },
+        module: {
+          rules: [{
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
+              }
+            }
+          }]
+        },
+      }
+    ))
+    .on('error', function (err) {
+      console.error('WEBPACK ERROR', err);
+      this.emit('end'); // Don't stop the rest of the task
+    })
+
+    .pipe(sourcemaps.init())
+    .pipe(minJS({
+      toplevel: true,
+      format: {
+        comments: false,
+      },
+    }))
+
+    // .pipe(rename('main.js'))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('source/js'))
+    .pipe(browserSync.stream());
+};
+
+export const watch = () => {
+  gulp.watch('source/html/**/*.html', htmlInclude);
+  gulp.watch('source/less/**/*.less', css);
+  gulp.watch(['source/js/components/**/*.js', 'source/js/main.js'], js);
+  gulp.watch('source/img/svg-sprite/**/*.svg', svgSprite);
+  gulp.watch('source/*.html').on('change', browserSync.reload);
+};
+
+export const server = () => {
+  browserSync.init({
+    notify: false,
+    open: true,
+    cors: true,
+    ui: false,
+    server: {
+      baseDir: 'source/',
+      routes: {
+        'node_modules/': 'node_modules',
+      },
+    },
+  });
+};
+
+
+export default gulp.series(gulp.parallel(css, js), gulp.parallel(watch, server));
+
+// опциональные таски
+
+// export const htmlPUG = () => {
 //   return gulp.src('source/pug/pages/**/*.pug')
 //     .pipe(plumber())
 //     .pipe(pug({
@@ -43,91 +134,37 @@ const ttf2woff2 = require('gulp-ttf2woff2');
 //     .pipe(formatHTML())
 //     .pipe(gulp.dest('source/'))
 //     .pipe(server.stream());
-// });
+// };
 
-// gulp.task('html-format', function() {
+// export const htmlFormat = () => {
 //   return gulp.src('source/*.html')
 //     .pipe(formatHTML())
 //     .pipe(gulp.dest('source/'))
-// });
+// };
 
-gulp.task('html-include', function() {
-  return gulp.src('source/html/pages/**/*.html')
-    .pipe(fileinclude({
-      prefix: '@',
-      basepath: '@file',
-    }))
-    .pipe(gulp.dest('source/'))
-    .pipe(server.stream());
-});
-
-gulp.task('css', function() {
-  return gulp.src('source/less/style.less')
-    .pipe(plumber())
-    .pipe(sourcemap.init())
-    .pipe(less().on('error', notify.onError()))
-    // .pipe(sass({outputStyle: 'expanded'}).on('error', notify.onError()))
-    .pipe(postcss([autoprefixer()]))
-    .pipe(sourcemap.write('.'))
-    .pipe(gulp.dest('source/css'))
-    .pipe(server.stream());
-});
-
-gulp.task('js', function() {
-  return gulp.src('source/js/components/**/*.js')
-    .pipe(plumber())
-    .pipe(concat('main.js'))
-    // .pipe(uglify(toplevel: true).on('error', notify.onError()))
-    .pipe(uglify())
-    .pipe(gulp.dest('source/js'))
-    .pipe(server.stream());
-});
-
-gulp.task('server', function() {
-  server.init({
-    server: 'source/',
-    notify: false,
-    open: true,
-    cors: true,
-    ui: false,
-  });
-
-  // gulp.watch('source/pug/**/*.pug', gulp.series('pug'));
-  gulp.watch('source/html/**/*.html', gulp.series('html-include'));
-  gulp.watch('source/less/**/*.less', gulp.series('css'));
-  // gulp.watch('source/js/**/*.js', gulp.series('js'));
-  gulp.watch('source/js/components/*.js', gulp.series('js'));
-  gulp.watch('source/img/svg-sprite/**/*.svg', gulp.series('svg-sprite'));
-  gulp.watch('source/*.html').on('change', server.reload);
-});
-
-gulp.task('default', gulp.series('html-include', 'css', 'js', 'server'));
-
-// опциональные таски
-
-gulp.task('fonts', function() {
+export const fontToWoff = () => {
   gulp.src('source/fonts/ttf2/**/*.ttf')
     .pipe(ttf2woff())
-    .pipe(gulp.dest('build/fonts/'))
+    .pipe(gulp.dest('source/fonts/'))
   return gulp.src('source/fonts/ttf2/**/*.ttf')
     .pipe(ttf2woff2())
-    .pipe(gulp.dest('build/fonts/'));
-});
+    .pipe(gulp.dest('source/fonts/'));
+};
 
-gulp.task('webp', function() {
+export const imgToWebp = () => {
   return gulp.src('source/img/**/*.{png,jpg}')
     .pipe(webp({quality: 90}))
     .pipe(gulp.dest('build/img/webp'));
-});
+};
 
-gulp.task('svg-sprite', function() {
+export const svgSprite = () => {
   return gulp.src('source/img/svg-sprite/**/*.svg')
     .pipe(svgstore({inlineSvg: true}))
     .pipe(rename('sprite.svg'))
     .pipe(gulp.dest('source/img'));
-});
+};
 
-gulp.task('svg-rename', function() {
+export const svgRename = () => {
   let fullPath, parentPath;
 
   return gulp.src('source/img/icons/**/*.svg')
@@ -141,62 +178,105 @@ gulp.task('svg-rename', function() {
     }))
 
     .pipe(gulp.dest('source/img/icons-rename'));
-});
+};
 
 // BUILD
 
-gulp.task('del', function() {
+export const delFiles = () => {
   return del(['build/*']);
-});
+};
 
-gulp.task('css-build', function() {
+export const copyLibs = () => {
+  return gulp.src([
+    'source/fonts/**/*',
+    '!source/fonts/ttf2',
+    '!source/fonts/ttf2/**/*',
+
+    'source/css/libs/**/*',
+    'source/js/libs/**/*',
+    ], {'base' : 'source/'})
+    .pipe(gulp.dest('build'))
+};
+
+export const cssBuild = () => {
   return gulp.src('source/less/style.less')
     .pipe(plumber())
     .pipe(less().on('error', notify.onError()))
     // .pipe(sass({outputStyle: 'expanded'}).on('error', notify.onError()))
     .pipe(postcss([autoprefixer()]))
-    .pipe(cleanCSS({level: 2}))
+    .pipe(minCSS({level: 2}))
     .pipe(rename('style.min.css'))
     .pipe(gulp.dest('build/css'))
-    .pipe(server.stream());
-});
+};
 
-gulp.task('js-build', function() {
-  return gulp.src('source/js/*.js')
-    .pipe(plumber())
-    .pipe(concat('main.js'))
-    .pipe(babel({presets: ['@babel/env']}))
-    .pipe(uglify({mangle: {toplevel: true}}))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest('build/js'));
-});
+export const jsBuild = () => {
+  return gulp.src('source/js/components/common.js')
+    .pipe(webpackStream(
+      {
+        mode: 'production',
+        output: {
+          filename: 'build.js',
+        },
+        module: {
+          rules: [{
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
+              }
+            }
+          }]
+        },
+      }
+    ))
+    .on('error', function (err) {
+      console.error('WEBPACK ERROR', err);
+      this.emit('end'); // Don't stop the rest of the task
+    })
+    .pipe(minJS({
+      toplevel: true,
+      format: {
+        comments: false,
+      },
+    }))
+    // .pipe(rename('build.min.js'))
+    .pipe(gulp.dest('build/js'))
+};
 
-gulp.task('html-include-build', function() {
+// without html templates
+export const htmlBuild = () => {
+  return gulp.src('source/*.html')
+    .pipe(gulp.dest('build/'));
+};
+
+// including html templates
+export const htmlIncludeBuild = () => {
   return gulp.src('source/html/pages/**/*.html')
     .pipe(fileinclude({
       prefix: '@',
       basepath: '@file',
     }))
     .pipe(gulp.dest('build/'));
-});
+};
 
-gulp.task('html-replace-build', function() {
+export const htmlReplaceBuild = () => {
   return gulp.src('build/**/*.html')
     .pipe(replace('href="css/style.css"', 'href="css/style.min.css"'))
-    .pipe(replace('src="js/main.js"', 'src="js/main.min.js"'))
+    .pipe(replace('src="js/build.js"', 'src="js/build.min.js"'))
     .pipe(gulp.dest('build'));
-});
+};
 
-gulp.task('copy-libs', function() {
-  return gulp.src([
-    'source/fonts/**/*',
-    'source/css/libs/**/*',
-    'source/js/libs/**/*',
-    ], {'base' : 'source/'})
+export const htmlMin = () => {
+  return gulp.src('build/**/*.html')
+    .pipe(minHTML({
+      collapseWhitespace: true
+    }))
     .pipe(gulp.dest('build'));
-});
+};
 
-gulp.task('img-min', function() {
+export const imgMin = () => {
   return gulp.src([
     'source/img/**/*.{png,jpg,jpeg,svg}',
     '!source/img/sprite.svg',
@@ -204,24 +284,30 @@ gulp.task('img-min', function() {
     ])
     .pipe(imagemin([
       imagemin.optipng({ optimizationLevel: 3 }),
-      imagemin.jpegtran({ progressive: true }),
+      imageminJpegtran({ progressive: true }),
       imagemin.svgo(),
     ]))
     .pipe(gulp.dest('build/img'));
-});
+};
 
-gulp.task('svg-sprite-min', function() {
+export const svgSpriteMin = () => {
   return gulp.src('source/img/svg-sprite/**/*.svg')
     .pipe(imagemin([imagemin.svgo()]))
     .pipe(svgstore({inlineSvg: true}))
     .pipe(rename('sprite.svg'))
     .pipe(gulp.dest('build/img'));
-});
+};
 
-// gulp.task('svg-sprite-clean', function () {
-//   return del(['build/img/svg-sprite'])
-// });
-
-// gulp.task('svg-sprite-build', gulp.series('svg-sprite-min', 'svg-sprite-clean'));
-
-gulp.task('build', gulp.series('del', gulp.parallel('css-build', 'js-build', 'html-include-build', 'copy-libs', 'img-min', 'svg-sprite-min'), 'html-replace-build'));
+export const build = gulp.series(
+  delFiles,
+  gulp.parallel(
+    cssBuild,
+    jsBuild,
+    htmlBuild,
+    copyLibs,
+    imgMin,
+    svgSpriteMin
+  ),
+  htmlReplaceBuild,
+  htmlMin
+);
